@@ -127,3 +127,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# RData, codebooks, and questionnaires
+/rdata
+/q_cb
+
+# Virtual environment
+/wv-env
