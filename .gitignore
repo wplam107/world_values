@@ -134,3 +134,9 @@ dmypy.json
 
 # Virtual environment
 /wv-env
+
+# VSCode
+/.vscode
+
+# Pickle files
+*.p
