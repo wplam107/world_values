@@ -37,26 +37,36 @@ def _select_traits(df, selected_traits=[]):
         temp = temp.loc[temp[trait] == True]
     return temp
 
+def a_given_b(df, a=[], b=[]):
+    temp = df
+    for trait in b:
+        temp = temp.loc[temp[trait] == True]
+
 def apriori(df, country='ALL', selected_traits=[]):
     # Preprocessing
-    data = _build_working_df(df)
-    data = _select_country(data, country)
+    df = _build_working_df(df)
+    df = _select_country(df, country)
 
     # Total observations
-    total_obs = len(data)
+    total_obs = len(df)
 
     # Subset of selected traits
-    sub = _select_traits(data, selected_traits=selected_traits)
+    b_sub = _select_traits(df, selected_traits=selected_traits)
 
     # Proportion of subset
     st_obs = len(sub)
-    proportion_sub = st_obs / total_obs
+    proportion_sub = round(st_obs / total_obs, 4)
 
     # List of unselected traits
     ns_traits = [ trait for trait in TRAITS if trait not in selected_traits ]
 
-    # Dictionary of proportions
-    dict_ = { trait: round(sum(sub[trait]) / st_obs, 4) for trait in ns_traits }
-    dict_[', '.join(selected_traits)] = proportion_sub
+    # DataFrame of proportions
+    overall_p = [ round(sum(sub[trait]) / total_obs, 4) for trait in ns_traits ]
+    agb_p = [ round(sum(sub[trait]) / st_obs, 4) for trait in ns_traits ]
+    data = pd.DataFrame()
+    data['A'] = ns_traits
+    data['B'] = ', '.join(selected_traits)
+    data['A and B Proportion'] = overall_p
+    data['A given B Proportion'] = agb_p
 
-    return dict_
+    return data
